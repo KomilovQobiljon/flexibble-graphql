@@ -1,6 +1,5 @@
 "use client";
 
-import { Fragment } from "react";
 import { Menu } from '@headlessui/react';
 import Image from "next/image";
 
@@ -12,6 +11,7 @@ type Props = {
 }
 
 const CustomMenu = ({title, state, filters, setState}: Props) => {
+
   return (
     <div className="flexStart flex-col w-full gap-7 relative">
       <label htmlFor={title} className="w-full text-gray-100">

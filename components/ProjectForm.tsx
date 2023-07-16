@@ -20,23 +20,12 @@ const ProjectForm = ({ type, session, project } : Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   let initialState = {
-    image: "",
-    title: "",
-    description: "",
-    liveSiteUrl: "",
-    githubUrl: "",
-    category: "",
-  }
-
-  if(project){
-    initialState = {
-      image: project.image,
-      title: project.title,
-      description: project.description,
-      liveSiteUrl: project.liveSiteUrl,
-      githubUrl: project.githubUrl,
-      category: project.category,
-    }
+    image: project?.image || "",
+    title: project?.title || "",
+    description: project?.description || "",
+    liveSiteUrl: project?.liveSiteUrl || "",
+    githubUrl: project?.githubUrl || "",
+    category: project?.category || "",
   }
   const [form, setForm] = useState(initialState);
 
@@ -54,7 +43,7 @@ const ProjectForm = ({ type, session, project } : Props) => {
         router.push("/");
       }else if(type === "edit"){
         // update project
-        await updateProject(form, session?.user?.id, project?.id, token);
+        await updateProject(form, session?.user?.id, project?.id as string, token);
 
         router.push("/");
       }

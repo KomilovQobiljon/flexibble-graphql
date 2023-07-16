@@ -88,10 +88,8 @@ export const createNewProject = async (form: ProjectForm, creatorId: string, tok
 export const fetchAllProjects = async (category?: string, endcursor?: string) => {
   client.setHeader('x-api-key', apiKey)
   const variables = {
-    input: { 
       category, 
-      endcursor
-    }
+      endcursor 
   }
   return makeGraphQLRequest(projectsQuery, variables)
 }
