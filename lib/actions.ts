@@ -23,6 +23,7 @@ const makeGraphQLRequest = async (query: string, variables = {}) => {
   try{
     return await client.request(query, variables)
   }catch (error) {
+    console.log(error)
     throw error;
   }
 } 
