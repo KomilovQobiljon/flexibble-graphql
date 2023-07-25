@@ -3,6 +3,7 @@ import Categories from "@/components/Categories";
 import LoadMore from "@/components/LoadMore";
 import ProjectCard from "@/components/ProjectCard";
 import { fetchAllProjects } from "@/lib/actions";
+import { getCurrentUser } from "@/lib/session";
 
 type ProjectSearch = {
   projectSearch: {
@@ -17,8 +18,8 @@ type ProjectSearch = {
 }
 
 type SearchParams = { 
-  category?: string;
-  endcursor?: string;
+  category: string;
+  endcursor: string;
 }
 
 type Props = {
@@ -27,8 +28,7 @@ type Props = {
 
 const Home = async ({ searchParams: { category, endcursor } }: Props ) => {
   const data = await fetchAllProjects(category, endcursor) as ProjectSearch;
-  console.log(data)
-  
+  const session = await getCurrentUser();
   const projectsToDisplay = data?.projectSearch?.edges || [];
 
   if(projectsToDisplay.length === 0){
@@ -56,9 +56,17 @@ const Home = async ({ searchParams: { category, endcursor } }: Props ) => {
               id={node?.id}
               image={node?.image}
               title={node?.title}
+              likedBy={node?.likedBy}
+              likes={node?.likes}
+              views={node?.views}
               name={node?.createdBy?.name}
               avatarUrl={node?.createdBy?.avatarUrl}
               userId={node?.createdBy?.id}
+              githubUrl={node?.githubUrl}
+              description={node?.description}
+              liveSiteUrl={node?.liveSiteUrl}
+              category={node?.category}
+              session={session}
             />
           )
         })}

@@ -1,4 +1,4 @@
-import { ProjectForm } from '@/common.types';
+import { ProjectForm, UpdateDetails } from '@/common.types';
 import { 
   getUserQuery, 
   createUserMutation, 
@@ -7,7 +7,8 @@ import {
   getProjectByIdQuery, 
   getProjectsOfUserQuery, 
   updateProjectMutation, 
-  deleteProjectMutation 
+  deleteProjectMutation, 
+  projectsWithoutCategoryQuery
 } from '@/graphql';
 import { GraphQLClient } from 'graphql-request';
 
@@ -16,13 +17,12 @@ const apiUrl = isProduction ? process.env.NEXT_PUBLIC_GRAFBASE_API_URL || '' : '
 const apiKey = isProduction ? process.env.NEXT_PUBLIC_GRAFBASE_API_KEY || '' : 'letmein';
 const serverUrl = isProduction ? process.env.NEXT_PUBLIC_SERVER_URL : 'http://localhost:3000';
 
-const client = new GraphQLClient(apiUrl)
+const client = new GraphQLClient(apiUrl);
 
 const makeGraphQLRequest = async (query: string, variables = {}) => {
   try{
     return await client.request(query, variables)
   }catch (error) {
-    console.log(error)
     throw error;
   }
 } 
@@ -85,13 +85,75 @@ export const createNewProject = async (form: ProjectForm, creatorId: string, tok
   }
 };
 
-export const fetchAllProjects = async (category?: string, endcursor?: string) => {
+export const fetchAllProjects = async (category: string, endcursor: string)=> {
   client.setHeader('x-api-key', apiKey)
-  const variables = {
-      category, 
-      endcursor 
+  const variables = { 
+    category,
+    endcursor 
+  }
+  
+  if(!category){
+    return makeGraphQLRequest(projectsWithoutCategoryQuery, variables)
   }
   return makeGraphQLRequest(projectsQuery, variables)
+}
+
+export const postViewLike = async ({ 
+  session, id, title, description, image, githubUrl, 
+  liveSiteUrl, category, likedBy, likes, views 
+}: UpdateDetails) => {
+  client.setHeader('x-api-key', apiKey);
+  let newLikedBy;
+  let newLikes;
+
+  if(likedBy.includes(session?.user?.id)){
+    newLikedBy = likedBy.filter((id)=>id !== session?.user?.id);
+    newLikes = `${newLikedBy.length}`;
+  }else{
+    newLikedBy = [...likedBy, session?.user?.id];
+    newLikes = `${newLikedBy.length}`;
+  }
+
+  const variables = {
+    id: id,
+    input: {
+      title,
+      description,
+      image,
+      githubUrl,
+      liveSiteUrl,
+      category,
+      likedBy: newLikedBy,
+      likes: newLikes,
+      views
+    }
+  }
+
+  return makeGraphQLRequest(updateProjectMutation, variables)
+}
+
+export const postView = async ({ 
+  id, title, description, image, githubUrl, 
+  liveSiteUrl, category, likedBy, likes, views 
+}: UpdateDetails) => {
+  client.setHeader('x-api-key', apiKey);
+
+  const variables = {
+    id: id,
+    input: {
+      title,
+      description,
+      image,
+      githubUrl,
+      liveSiteUrl,
+      category,
+      likedBy,
+      likes,
+      views
+    }
+  }
+
+  return makeGraphQLRequest(updateProjectMutation, variables)
 }
 
 export const getProjectDetails = (id: string) => {
@@ -117,7 +179,6 @@ export const updateProject = async (form: ProjectForm, creatorId: string, projec
         image: imageUrl.url,
       }
     }
-    console.log(variables)
     return makeGraphQLRequest(updateProjectMutation, variables);
   }
 }

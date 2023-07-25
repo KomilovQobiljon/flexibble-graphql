@@ -1,26 +1,27 @@
-"use client"
-import { useEffect, useState } from 'react'
 import Image from "next/image";
 import Link from "next/link";
+import LikeAndSeen from './LikeAndSeen';
+import { SessionInterface } from "@/common.types";
 
 type Props = {
   id: string;
   title: string;
   image: string;
+  likedBy: string[];
+  likes: string;
+  views: string;
   name: string;
   avatarUrl: string;
   userId: string;
+  session: SessionInterface;
+  githubUrl: string;
+  description: string;
+  liveSiteUrl: string;
+  category: string;
 }
 
-const ProjectCard = ({ id, title, image, name, avatarUrl, userId }: Props) => {
-  const [randomLikes, setRandomLikes] = useState(0);
-  const [radomViews, setRandomViews] = useState('');
-
-  useEffect(()=>{
-    setRandomLikes(Math.floor(Math.random() * 10000));
-    setRandomViews(String((Math.floor(Math.random()*10000)/1000).toFixed(1)+'k'))
-  },[]);
-  
+const ProjectCard = async ({ id, title, image, githubUrl, description, liveSiteUrl, category, name, likedBy, likes, views, avatarUrl, userId, session }: Props) => {
+ 
   return (
     <div 
       className="flexCenter flex-col rounded-2xl drop-shadow-card"
@@ -55,16 +56,13 @@ const ProjectCard = ({ id, title, image, name, avatarUrl, userId }: Props) => {
           </div>
         </Link>
 
-        <div className="flexCenter gap-3">
-          <div className="flexCenter gap-2">
-            <Image src="/hearth.svg" width={13} height={12} alt="heart" />
-            <p className="text-sm">525</p>
-          </div>
-          <div className="flexCenter gap-2">
-            <Image src="/eye.svg" width={13} height={12} alt="heart" />
-            <p className="text-sm">5.2k</p>
-          </div>
-        </div>
+        <LikeAndSeen 
+          likedBy={likedBy} likes={likes} views={views} 
+          session={session} id={id} title={title} avatarUrl={avatarUrl}
+          userId={userId} image={image} name={name}
+          githubUrl={githubUrl} description={description}
+          liveSiteUrl={liveSiteUrl} category={category}
+        />
       </div>
     </div>
   )

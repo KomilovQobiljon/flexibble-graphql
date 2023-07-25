@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type PageInfo = {
   startCursor: string;
@@ -15,7 +15,6 @@ type Props = {
 const LoadMore = ({ pageInfo: { startCursor, endCursor, hasNextPage, hasPreviousPage} }: Props) => {
   const router = useRouter();
   const pathName = usePathname();
-  const searchParams = useSearchParams()
 
   const handleStart = (cursor: string) => {
     router.push(`${pathName}?startcursor=${cursor}`);

@@ -31,7 +31,10 @@ const Project = g.model("Project",{
   liveSiteUrl: g.url(),
   githubUrl: g.url(),
   category: g.string().search(),
-  createdBy: g.relation(() => User)
+  createdBy: g.relation(() => User),
+  likes: g.string(),
+  likedBy: g.string().list(),
+  views: g.string(),
 }).auth((rules) => {
   rules.public().read();
   rules.private().create().delete().update();

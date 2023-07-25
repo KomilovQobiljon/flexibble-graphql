@@ -19,13 +19,13 @@ const Navbar = async () => {
             alt="logo"
           />
         </Link>
-        <ul className="xl:flex hidden text-small gap-7">
+        {/* <ul className="xl:flex hidden text-small gap-7">
           {NavLinks.map((link) => {
             return (<Link href={link.href} key={link.key}>
               {link.text}
             </Link>)
           })}
-        </ul>
+        </ul> */}
       </div>
       <div className="flexCenter gap-4">
           {session?.user ? (

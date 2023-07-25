@@ -17,6 +17,9 @@ export interface ProjectInterface {
     githubUrl: string;
     category: string;
     id: string;
+    likedBy: string[];
+    likes: string;
+    views: string;
     createdBy: {
       name: string;
       email: string;
@@ -60,4 +63,19 @@ export interface ProjectForm {
   liveSiteUrl: string;
   githubUrl: string;
   category: string;
+}
+
+export interface UpdateDetails {
+  session?: SessionInterface;
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  liveSiteUrl: string;
+  githubUrl: string;
+  category: string;
+  likedBy: string[];
+  likes: string;
+  views: string;
+  name?: string;
 }

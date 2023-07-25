@@ -26,6 +26,9 @@ const ProjectForm = ({ type, session, project } : Props) => {
     liveSiteUrl: project?.liveSiteUrl || "",
     githubUrl: project?.githubUrl || "",
     category: project?.category || "",
+    likes: '0',
+    likedBy: [],
+    views: '0',
   }
   const [form, setForm] = useState(initialState);
 
@@ -38,6 +41,7 @@ const ProjectForm = ({ type, session, project } : Props) => {
     try{
       if(type === "create"){
         // create project
+        console.log(form);
         await createNewProject(form, session?.user?.id, token);
 
         router.push("/");
@@ -59,8 +63,9 @@ const ProjectForm = ({ type, session, project } : Props) => {
 
     if(!file) return;
     const fileMb = file.size / 1024 ** 2;
+    console.log(fileMb)
 
-    if (fileMb >= 2) {
+    if (fileMb >= 10) {
       return alert("Files more than 10MB are not allowed")
     } else {
       if(!file.type.includes("image")){

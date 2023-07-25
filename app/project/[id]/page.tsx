@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import { ProjectInterface } from '@/common.types';
-import { getProjectDetails } from '@/lib/actions';
+import { getProjectDetails, postView } from '@/lib/actions';
 import { getCurrentUser } from '@/lib/session';
 import RelatedProjects from "@/components/RelatedProjects";
 import ProjectActions from "@/components/ProjectActions";
@@ -11,6 +11,19 @@ import ProjectActions from "@/components/ProjectActions";
 const Project = async ({ params: { id }}: { params: { id: string }}) => {
   const session = await getCurrentUser();
   const data = await getProjectDetails(id) as { project?: ProjectInterface };
+  const viewresult = await postView({
+    id: data?.project?.id || '',
+    title: data?.project?.title || '',
+    description: data?.project?.description || '',
+    image: data?.project?.image || '',
+    githubUrl: data?.project?.githubUrl || '',
+    liveSiteUrl: data?.project?.liveSiteUrl || '',
+    category: data?.project?.category || '',
+    likedBy: data?.project?.likedBy || [],
+    likes: data?.project?.likes || '',
+    views: `${Number(data?.project?.views)+1}`,
+  });
+
   if(!data?.project){
     return <p>Failed to fetch project information</p>
   }
