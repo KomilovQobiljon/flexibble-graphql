@@ -66,7 +66,21 @@ export interface ProjectForm {
 }
 
 export interface UpdateDetails {
-  session?: SessionInterface;
+  session: SessionInterface;
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  liveSiteUrl: string;
+  githubUrl: string;
+  category: string;
+  likedBy: string[];
+  likes: string;
+  views: string;
+  name?: string;
+}
+
+export interface UpdateViewDetails {
   id: string;
   title: string;
   description: string;

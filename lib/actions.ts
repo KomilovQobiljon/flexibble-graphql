@@ -1,4 +1,4 @@
-import { ProjectForm, UpdateDetails } from '@/common.types';
+import { ProjectForm, UpdateDetails, UpdateViewDetails } from '@/common.types';
 import { 
   getUserQuery, 
   createUserMutation, 
@@ -135,7 +135,7 @@ export const postViewLike = async ({
 export const postView = async ({ 
   id, title, description, image, githubUrl, 
   liveSiteUrl, category, likedBy, likes, views 
-}: UpdateDetails) => {
+}: UpdateViewDetails) => {
   client.setHeader('x-api-key', apiKey);
 
   const variables = {
